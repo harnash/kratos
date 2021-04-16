@@ -60,20 +60,20 @@
         "hook"
       ]
     },
-    "selfServiceWebHooks": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "hook": {
-            "const": "web-hook"
-          },
-          "config": {
-            "type": "object"
-          }
+    "selfServiceWebHook": {
+      "type": "object",
+      "properties": {
+        "hook": {
+          "const": "web-hook"
+        },
+        "config": {
+          "type": "object"
         }
       },
-      "uniqueItems": true
+      "additionalProperties": false,
+      "required": [
+        "hook"
+      ]
     },
     "OIDCClaims": {
       "title": "OpenID Connect claims",
@@ -276,6 +276,24 @@
         }
       }
     },
+    "selfServiceGlobalHooks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hooks": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/selfServiceWebHook"
+              }
+            ]
+          },
+          "uniqueItems": true,
+          "additionalItems": false
+        }
+      }
+    },
     "selfServiceAfterSettingsMethod": {
       "type": "object",
       "additionalProperties": false,
@@ -331,6 +349,9 @@
             "anyOf": [
               {
                 "$ref": "#/definitions/selfServiceSessionIssuerHook"
+              },
+              {
+                "$ref": "#/definitions/selfServiceWebHook"
               }
             ]
           },
@@ -382,8 +403,8 @@
         "oidc": {
           "$ref": "#/definitions/selfServiceAfterRegistrationMethod"
         },
-        "web_hooks": {
-          "ref": "#/definitions/selfServiceWebHooks"
+        "global": {
+          "ref": "#/definitions/selfServiceGlobalHooks"
         }
       }
     },
@@ -394,8 +415,8 @@
         "default_browser_return_url": {
           "$ref": "#/definitions/defaultReturnTo"
         },
-        "web_hooks": {
-          "$ref": "#/definitions/selfServiceWebHooks"
+        "global": {
+          "$ref": "#/definitions/selfServiceGlobalHooks"
         }
       }
     }
@@ -783,7 +804,9 @@
               "title": "SMTP Sender Name",
               "description": "The recipient of an email will see this as the sender name.",
               "type": "string",
-              "examples": ["Bob"]
+              "examples": [
+                "Bob"
+              ]
             }
           },
           "required": [
@@ -1323,7 +1346,10 @@
           "description": "One of the values: argon2, bcrypt",
           "type": "string",
           "default": "argon2",
-          "enum": ["argon2", "bcrypt"]
+          "enum": [
+            "argon2",
+            "bcrypt"
+          ]
         },
         "argon2": {
           "title": "Configuration for the Argon2id hasher.",
@@ -1356,7 +1382,9 @@
           "title": "Configuration for the Bcrypt hasher.",
           "type": "object",
           "additionalProperties": false,
-          "required": ["cost"],
+          "required": [
+            "cost"
+          ],
           "properties": {
             "cost": {
               "type": "integer",
