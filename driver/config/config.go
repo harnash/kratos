@@ -64,7 +64,6 @@ const (
 	ViperKeySelfServiceRegistrationUI                               = "selfservice.flows.registration.ui_url"
 	ViperKeySelfServiceRegistrationRequestLifespan                  = "selfservice.flows.registration.lifespan"
 	ViperKeySelfServiceRegistrationAfter                            = "selfservice.flows.registration.after"
-	ViperKeySelfServiceRegistrationAfterWebHooks                    = "selfservice.flows.registration.after.web_hooks"
 	ViperKeySelfServiceRegistrationBeforeHooks                      = "selfservice.flows.registration.before.hooks"
 	ViperKeySelfServiceLoginUI                                      = "selfservice.flows.login.ui_url"
 	ViperKeySelfServiceLoginRequestLifespan                         = "selfservice.flows.login.lifespan"
@@ -84,7 +83,7 @@ const (
 	ViperKeySelfServiceVerificationUI                               = "selfservice.flows.verification.ui_url"
 	ViperKeySelfServiceVerificationRequestLifespan                  = "selfservice.flows.verification.lifespan"
 	ViperKeySelfServiceVerificationBrowserDefaultReturnTo           = "selfservice.flows.verification.after." + DefaultBrowserReturnURL
-	ViperKeySelfServiceVerificationAfterWebHooks                    = "selfservice.flows.verification.after.web_hooks"
+	ViperKeySelfServiceVerificationAfter                            = "selfservice.flows.verification.after."
 	ViperKeyDefaultIdentitySchemaURL                                = "identity.default_schema_url"
 	ViperKeyIdentitySchemas                                         = "identity.schemas"
 	ViperKeyHasherAlgorithm                                         = "hashers.algorithm"
@@ -386,10 +385,6 @@ func (p *Config) SelfServiceFlowSettingsAfterHooks(strategy string) []SelfServic
 
 func (p *Config) SelfServiceFlowRegistrationAfterHooks(strategy string) []SelfServiceHook {
 	return p.selfServiceHooks(HookStrategyKey(ViperKeySelfServiceRegistrationAfter, strategy))
-}
-
-func (p *Config) SelfServiceFlowRegistrationAfterWebHooks() []SelfServiceHook  {
-	return p.selfServiceHooks(ViperKeySelfServiceRegistrationAfterWebHooks)
 }
 
 func (p *Config) SelfServiceStrategy(strategy string) *SelfServiceStrategy {
@@ -694,8 +689,8 @@ func (p *Config) SelfServiceFlowVerificationReturnTo(defaultReturnTo *url.URL) *
 	return p.p.RequestURIF(ViperKeySelfServiceVerificationBrowserDefaultReturnTo, defaultReturnTo)
 }
 
-func (p *Config) SelfServiceFlowVerificationAfterWebHooks() []SelfServiceHook {
-	return p.selfServiceHooks(ViperKeySelfServiceVerificationAfterWebHooks)
+func (p *Config) SelfServiceFlowVerificationAfterHooks(strategy string) []SelfServiceHook {
+	return p.selfServiceHooks(HookStrategyKey(ViperKeySelfServiceVerificationAfter, strategy))
 }
 
 func (p *Config) SelfServiceFlowRecoveryReturnTo() *url.URL {
