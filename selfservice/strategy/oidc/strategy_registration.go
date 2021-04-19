@@ -90,7 +90,7 @@ func (s *Strategy) processRegistration(w http.ResponseWriter, r *http.Request, a
 
 	vm := jsonnet.MakeVM()
 	vm.ExtCode("claims", jsonClaims.String())
-	evaluated, err := vm.EvaluateSnippet(provider.Config().Mapper, jn.String())
+	evaluated, err := vm.EvaluateAnonymousSnippet(provider.Config().Mapper, jn.String())
 	if err != nil {
 		s.handleError(w, r, a.GetID(), provider.Config().ID, nil, err)
 		return
