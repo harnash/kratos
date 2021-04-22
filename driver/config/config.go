@@ -147,7 +147,11 @@ type (
 var Argon2DefaultParallelism = uint8(runtime.NumCPU() * 2)
 
 func HookStrategyKey(key, strategy string) string {
-	return fmt.Sprintf("%s.%s.hooks", key, strategy)
+	if strategy == "none" {
+		return fmt.Sprintf("%s.hooks", key)
+	} else {
+		return fmt.Sprintf("%s.%s.hooks", key, strategy)
+	}
 }
 
 func (s Schemas) FindSchemaByID(id string) (*Schema, error) {
